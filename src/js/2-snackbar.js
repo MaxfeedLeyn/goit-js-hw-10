@@ -7,19 +7,28 @@ const makePromise = ({ delay, shouldResolve }) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (shouldResolve) {
-        resolve();
-        iziToast.success({
-          message: `Fulfilled promise in ${delay}ms`,
-        });
+        resolve(delay);
       } else {
-        reject();
-        iziToast.error({
-          message: `Rejected promise in ${delay}ms`,
-        });
+        reject(delay);
       }
     }, delay);
   });
 };
+
+function executePromise(promiseCallback) {
+  promiseCallback
+    .then((value) => {
+        iziToast.success({
+          message: `Fulfilled promise in ${value}ms`,
+        });
+    })
+    .catch((error) => {
+        iziToast.error({
+          message: `Rejected promise in ${error}ms`,
+        });
+    });
+   return;
+}
 
 function getValue(groupName) {
   const radioButtons = document.getElementsByName(groupName);
@@ -48,9 +57,9 @@ form.addEventListener('submit', e => {
 SubmitBtn.addEventListener('click', () => {
   const selected = getValue('state');
   if (selected === 'fulfilled') {
-    makePromise({ delay: userDalay, shouldResolve: true });
+    executePromise(makePromise({ delay: userDalay, shouldResolve: true }));
   } else if (selected === 'rejected') {
-    makePromise({ delay: userDalay, shouldResolve: false });
+    executePromise(makePromise({ delay: userDalay, shouldResolve: false }));
   } else {
     return;
   }
