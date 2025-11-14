@@ -4,7 +4,7 @@ body {
 }
 
 main:has(.back-link) {
-  text-align: start;
+  text-align: start !important;
 }
 
 #datetime-picker {
